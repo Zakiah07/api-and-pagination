@@ -304,11 +304,22 @@ userDropdown.addEventListener("change", () => {
         const profileCard = createProfileCard(user);
         profileContainer.appendChild(profileCard);
       });
-      console.log(filteredUsers.length);
-      if (filteredUsers.length) {
+      // console.log(filteredUsers.length);
+      console.log(filteredUsers);
+      if (filteredUsers.length < usersPerPage) {
         pagination.style.display = "none";
       } else {
         pagination.style.display = "block";
+        for (let i = 1; i <= usersPerPage; i++) {
+          const button = document.createElement("button");
+          button.textContent = i;
+          button.id = `page-${i}`;
+          button.addEventListener("click", () => {
+            currentPage = i;
+            displayPage(filteredUsers);
+          });
+          pagination.appendChild(button);
+        }
       }
     }
   }

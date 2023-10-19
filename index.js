@@ -1,6 +1,5 @@
 const profileContainer = document.getElementById("profileContainer");
 const userDropdown = document.getElementById("userDropdown");
-const paginationButtons = document.querySelectorAll(".pagination");
 
 const userData = {
   user: [
@@ -201,15 +200,26 @@ function createProfileCard(user) {
   return profileCard;
 }
 
-function updatePaginationButtons() {
-  for (let i = 1; i <= 4; i++) {
-    const button = document.getElementById(`page-${i}`);
+const totalUsers = userData.user.length;
+const totalPages = Math.ceil(totalUsers / usersPerPage);
+
+function createPaginationButtons(totalPages) {
+  const pagination = document.getElementById("pagination");
+  pagination.innerHTML = "";
+
+  for (let i = 1; i <= totalPages; i++) {
+    const button = document.createElement("button");
+    button.textContent = i;
+    button.id = `page-${i}`;
     button.addEventListener("click", () => {
       currentPage = i;
       displayPage(currentPage);
     });
+    pagination.appendChild(button);
   }
 }
+
+createPaginationButtons(totalPages);
 
 function displayPage(page) {
   profileContainer.innerHTML = "";
@@ -247,8 +257,6 @@ function updateDropdown() {
     }
   });
 }
-
-updatePaginationButtons();
 
 userDropdown.addEventListener("change", () => {
   const selectedUserId = userDropdown.value;

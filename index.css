@@ -45,10 +45,8 @@
   
   .pagination {
     margin-top: 20px;
-    color: #fff;
-    padding: 10px 20px;
-    margin: 5px;
-    display: flex;
-    gap: 10px;
   }
   
+.pagination button {
+    margin: 3px; 
+  }

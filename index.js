@@ -1,35 +1,199 @@
 const profileContainer = document.getElementById("profileContainer");
-const previousButton = document.getElementById("page-1");
-const nextButton = document.getElementById("page-2");
+const userDropdown = document.getElementById("userDropdown");
+const paginationButtons = document.querySelectorAll(".pagination");
+
+const userData = {
+  user: [
+    {
+      id: 1,
+      email: "george.bluth@reqres.in",
+      first_name: "George",
+      last_name: "Bluth",
+      avatar: "https://reqres.in/img/faces/1-image.jpg",
+    },
+    {
+      id: 2,
+      email: "janet.weaver@reqres.in",
+      first_name: "Janet",
+      last_name: "Weaver",
+      avatar: "https://reqres.in/img/faces/2-image.jpg",
+    },
+    {
+      id: 3,
+      email: "emma.wong@reqres.in",
+      first_name: "Emma",
+      last_name: "Wong",
+      avatar: "https://reqres.in/img/faces/3-image.jpg",
+    },
+    {
+      id: 4,
+      email: "eve.holt@reqres.in",
+      first_name: "Eve",
+      last_name: "Holt",
+      avatar: "https://reqres.in/img/faces/4-image.jpg",
+    },
+    {
+      id: 5,
+      email: "charles.morris@reqres.in",
+      first_name: "Charles",
+      last_name: "Morris",
+      avatar: "https://reqres.in/img/faces/5-image.jpg",
+    },
+    {
+      id: 6,
+      email: "tracey.ramos@reqres.in",
+      first_name: "Tracey",
+      last_name: "Ramos",
+      avatar: "https://reqres.in/img/faces/6-image.jpg",
+    },
+    {
+      id: 7,
+      email: "michael.lawson@reqres.in",
+      first_name: "Michael",
+      last_name: "Lawson",
+      avatar: "https://reqres.in/img/faces/7-image.jpg",
+    },
+    {
+      id: 8,
+      email: "lindsay.ferguson@reqres.in",
+      first_name: "Lindsay",
+      last_name: "Ferguson",
+      avatar: "https://reqres.in/img/faces/8-image.jpg",
+    },
+    {
+      id: 9,
+      email: "tobias.funke@reqres.in",
+      first_name: "Tobias",
+      last_name: "Funke",
+      avatar: "https://reqres.in/img/faces/9-image.jpg",
+    },
+    {
+      id: 10,
+      email: "byron.fields@reqres.in",
+      first_name: "Byron",
+      last_name: "Fields",
+      avatar: "https://reqres.in/img/faces/10-image.jpg",
+    },
+    {
+      id: 11,
+      email: "george.edwards@reqres.in",
+      first_name: "George",
+      last_name: "Edwards",
+      avatar: "https://reqres.in/img/faces/11-image.jpg",
+    },
+    {
+      id: 12,
+      email: "rachel.howell@reqres.in",
+      first_name: "Rachel",
+      last_name: "Howell",
+      avatar: "https://reqres.in/img/faces/12-image.jpg",
+    },
+    {
+      id: 13,
+      email: "shelby.peters@reqres.in",
+      first_name: "Tracey",
+      last_name: "Ramos",
+      avatar: "",
+    },
+    {
+      id: 14,
+      email: "bruce.jones@reqres.in",
+      first_name: "George",
+      last_name: "Bluth",
+      avatar: "",
+    },
+    {
+      id: 15,
+      email: "victoria.wilson@reqres.in",
+      first_name: "Victoria",
+      last_name: "Wilson",
+      avatar: "",
+    },
+    {
+      id: 16,
+      email: "john.smith@reqres.in",
+      first_name: "John",
+      last_name: "Smith",
+      avatar: "",
+    },
+    {
+      id: 17,
+      email: "sarah.doe@reqres.in",
+      first_name: "Sarah",
+      last_name: "Doe",
+      avatar: "",
+    },
+    {
+      id: 18,
+      email: "daniel.brown@reqres.in",
+      first_name: "Daniel",
+      last_name: "Brown",
+      avatar: "",
+    },
+    {
+      id: 19,
+      email: "linda.johnson@reqres.in",
+      first_name: "Linda",
+      last_name: "Johnson",
+      avatar: "",
+    },
+    {
+      id: 20,
+      email: "william.williams@reqres.in",
+      first_name: "William",
+      last_name: "Williams",
+      avatar: "",
+    },
+    {
+      id: 21,
+      email: "susan.brown@reqres.in",
+      first_name: "Susan",
+      last_name: "Brown",
+      avatar: "",
+    },
+    {
+      id: 22,
+      email: "james.davis@reqres.in",
+      first_name: "James",
+      last_name: "Davis",
+      avatar: "",
+    },
+    {
+      id: 23,
+      email: "patricia.jackson@reqres.in",
+      first_name: "Patricia",
+      last_name: "Jackson",
+      avatar: "",
+    },
+    {
+      id: 24,
+      email: "robert.smith@reqres.in",
+      first_name: "Emma",
+      last_name: "Wong",
+      avatar: "",
+    },
+  ],
+};
+
+const usersPerPage = 6;
 let currentPage = 1;
 
-async function fetchData(page) {
-  try {
-    const response = await fetch(`https://reqres.in/api/users?page=${page}`);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching data");
-    return null;
-  }
-}
-
-function createProfileCard(profile) {
+function createProfileCard(user) {
   const profileCard = document.createElement("div");
   profileCard.classList.add("profile-card");
 
   const profileImage = document.createElement("img");
-  profileImage.src = profile.avatar;
-  profileImage.alt = `${profile.first_name} ${profile.last_name}`;
+  profileImage.src = user.avatar;
+  profileImage.alt = `${user.first_name} ${user.last_name}`;
   profileImage.classList.add("profile-image");
 
   const userDetails = document.createElement("div");
   userDetails.classList.add("user-details");
   userDetails.innerHTML = `
-        <p>ID: ${profile.id}</p>
-        <p>Name: ${profile.first_name} ${profile.last_name}</p>
-        <p>Email: ${profile.email}</p>
-    `;
+        <p>ID: ${user.id}</p>
+        <p>Name: ${user.first_name} ${user.last_name}</p>
+        <p>Email: ${user.email}</p>
+        `;
 
   profileCard.appendChild(profileImage);
   profileCard.appendChild(userDetails);
@@ -37,132 +201,83 @@ function createProfileCard(profile) {
   return profileCard;
 }
 
-async function displayPage(page) {
-  const data = await fetchData(page);
-  if (data) {
-    profileContainer.innerHTML = "";
-    data.data.forEach((user) => {
-      const profileCard = createProfileCard(user);
-      profileContainer.appendChild(profileCard);
-    });
-    // updatePagination(data)
-    
-    if (currentPage === 1) {
-      previousButton.setAttribute("disabled", true);
-    } else {
-      previousButton.removeAttribute("disabled");
-    }
-    
-    userDropdown.addEventListener("change", () => {
-      const selectedUserId = userDropdown.value;
-      filterProfiles(selectedUserId, page);
-      console.log(selectedUserId)
-      const filteredUsers = data.data.filter(
-        (user) => user.id == selectedUserId
-      );
-      // console.log(filteredUsers.length);
-      if (filteredUsers.length) {
-        previousButton.style.display = "none";
-        nextButton.style.display = "none";
-      } else {
-        previousButton.style.display = "block";
-        nextButton.style.display = "block";
-      }
+function updatePaginationButtons() {
+  for (let i = 1; i <= 4; i++) {
+    const button = document.getElementById(`page-${i}`);
+    button.addEventListener("click", () => {
+      currentPage = i;
+      displayPage(currentPage);
     });
   }
 }
 
-nextButton.addEventListener("click", async () => {
-  if (currentPage < 2) {
-    currentPage++;
-    displayPage(currentPage);
-    fetchUsers(currentPage);
-    previousButton.removeAttribute("disabled");
-    if (currentPage === 2) {
-      nextButton.setAttribute("disabled", true);
-    }
-  }
-});
+function displayPage(page) {
+  profileContainer.innerHTML = "";
+  const startIndex = (page - 1) * usersPerPage;
+  const endIndex = startIndex + usersPerPage;
 
-previousButton.addEventListener("click", async () => {
- if (currentPage > 1) {
-    currentPage--
-    displayPage(currentPage);
-    fetchUsers(currentPage);
-    nextButton.removeAttribute("disabled");
-    if (currentPage === 1) {
-      previousButton.setAttribute("disabled", true);
+  const usersToDisplay = userData.user.slice(startIndex, endIndex);
+
+  usersToDisplay.forEach((user) => {
+    const profileCard = createProfileCard(user);
+    profileContainer.appendChild(profileCard);
+  });
+
+  if (page === 1) {
+    pagination.style.display = "block";
+  }
+  // console.log("page", page);
+}
+
+// Create dropdown filter by name on select it should only show these names
+
+function updateDropdown() {
+  userDropdown.innerHTML = '<option value="">Select User</option>';
+  const uniqueNames = {};
+
+  userData.user.forEach((user) => {
+    const fullName = `${user.first_name} ${user.last_name}`;
+    if (!uniqueNames[fullName]) {
+      uniqueNames[fullName] = user.id;
+
+      const option = document.createElement("option");
+      option.value = user.id;
+      option.textContent = fullName;
+      userDropdown.appendChild(option);
+    }
+  });
+}
+
+updatePaginationButtons();
+
+userDropdown.addEventListener("change", () => {
+  const selectedUserId = userDropdown.value;
+  if (selectedUserId === "") {
+    displayPage(1);
+  } else {
+    const selectedUser = userData.user.find(
+      (user) => user.id === parseInt(selectedUserId, 10)
+    );
+    if (selectedUser) {
+      profileContainer.innerHTML = "";
+      const filteredUsers = userData.user.filter(
+        (user) =>
+          user.first_name === selectedUser.first_name &&
+          user.last_name === selectedUser.last_name
+      );
+      filteredUsers.forEach((user) => {
+        const profileCard = createProfileCard(user);
+        profileContainer.appendChild(profileCard);
+      });
+      console.log(filteredUsers.length);
+      if (filteredUsers.length) {
+        pagination.style.display = "none";
+      } else {
+        pagination.style.display = "block";
+      }
     }
   }
 });
 
 displayPage(currentPage);
-
-// Create dropdown filter by name on select it should only show these names
-
-const userDropdown = document.getElementById("userDropdown");
-let data;
-
-async function fetchData(page) {
-  try {
-    const response = await fetch(`https://reqres.in/api/users?page=${page}`);
-    const userData = await response.json();
-    data = userData;
-    return userData;
-  } catch (error) {
-    console.error("Error fetching data");
-    return null;
-  }
-}
-
-function fetchUsers(page) {
-  fetch(`https://reqres.in/api/users?page=${page}`)
-    .then((response) => response.json())
-    .then((userData) => {
-      data = userData;
-      userDropdown.innerHTML = '<option value="All">All</option>';
-      data.data.forEach((user) => {
-        const option = document.createElement("option");
-        option.value = user.id;
-        option.text = `${user.first_name} ${user.last_name}`;
-        userDropdown.appendChild(option);
-      });
-    })
-    .catch((error) => console.error("Error fetching data:", error));
-}
-
-fetchUsers();
-
-// Function to filter and display user profiles based on the selected option in the dropdown
-async function filterProfiles(selectedUserId, page) {
-  profileContainer.innerHTML = "";
-
-  if (selectedUserId === "All") {
-    displayPage(page);
-  } else {
-    const selectedUser = data.data.find(
-      (user) => user.id === parseInt(selectedUserId, 10)
-    );
-
-    if (selectedUser) {
-      const profileCard = createProfileCard(selectedUser);
-      profileContainer.appendChild(profileCard);
-    }
-  }
-}
-
-/* function updatePagination(data){
-  const filteredUsers = data.data.length;
-  if(filteredUsers < 6) {
-    previousButton.style.display = "none";
-    nextButton.style.display = "none";
-  } else {
-    previousButton.style.display = "block";
-    nextButton.style.display = "block";
-  }
-} */
-
-/* userDropdown.addEventListener("change", () => {
-  const selectedUserId = userDropdown.value;
-  filterProfiles(selectedUserId, currentPage);
-}); */
+updateDropdown();

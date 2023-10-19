@@ -1,6 +1,3 @@
-const profileContainer = document.getElementById("profileContainer");
-const userDropdown = document.getElementById("userDropdown");
-
 const userData = {
   user: [
     {
@@ -171,10 +168,40 @@ const userData = {
       last_name: "Wong",
       avatar: "",
     },
+    {
+      id: 25,
+      email: "john.smith@reqres.in",
+      first_name: "John",
+      last_name: "Smith",
+      avatar: "",
+    },
+    {
+      id: 26,
+      email: "john.smith@reqres.in",
+      first_name: "John",
+      last_name: "Smith",
+      avatar: "",
+    },
+    {
+      id: 27,
+      email: "john.smith@reqres.in",
+      first_name: "John",
+      last_name: "Smith",
+      avatar: "",
+    },
+    {
+      id: 28,
+      email: "john.smith@reqres.in",
+      first_name: "John",
+      last_name: "Smith",
+      avatar: "",
+    },
   ],
 };
 
-const usersPerPage = 6;
+const profileContainer = document.getElementById("profileContainer");
+const userDropdown = document.getElementById("userDropdown");
+const usersPerPage = 3;
 let currentPage = 1;
 
 function createProfileCard(user) {

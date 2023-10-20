@@ -291,7 +291,7 @@ userDropdown.addEventListener("change", () => {
   const filteredPages = Math.ceil(filteredUsers.length / usersPerPage);
   createPaginationButtons(filteredPages);
 
-  console.log("filtr", filteredPages);
+  // console.log("filtr", filteredPages);
 
   displayPage(currentPage);
 });

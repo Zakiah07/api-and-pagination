@@ -204,6 +204,9 @@ const userDropdown = document.getElementById("userDropdown");
 const usersPerPage = 3;
 let currentPage = 1;
 
+const allUsers = userData.user;
+let filteredUsers = [];
+
 function createProfileCard(user) {
   const profileCard = document.createElement("div");
   profileCard.classList.add("profile-card");
@@ -229,9 +232,9 @@ function createProfileCard(user) {
 
 const totalUsers = userData.user.length;
 const totalPages = Math.ceil(totalUsers / usersPerPage);
+const pagination = document.getElementById("pagination");
 
 function createPaginationButtons(totalPages) {
-  const pagination = document.getElementById("pagination");
   pagination.innerHTML = "";
 
   for (let i = 1; i <= totalPages; i++) {
@@ -246,24 +249,10 @@ function createPaginationButtons(totalPages) {
   }
 }
 
-createPaginationButtons(totalPages);
-
-function displayPage(page) {
-  profileContainer.innerHTML = "";
-  const startIndex = (page - 1) * usersPerPage;
-  const endIndex = startIndex + usersPerPage;
-
-  const usersToDisplay = userData.user.slice(startIndex, endIndex);
-
-  usersToDisplay.forEach((user) => {
-    const profileCard = createProfileCard(user);
-    profileContainer.appendChild(profileCard);
-  });
-
-  if (page === 1) {
-    pagination.style.display = "block";
-  }
-  // console.log("page", page);
+function filterUsersByFullName(firstName, lastName) {
+  filteredUsers = allUsers.filter(
+    (user) => user.first_name === firstName && user.last_name === lastName
+  );
 }
 
 // Create dropdown filter by name on select it should only show these names
@@ -288,42 +277,45 @@ function updateDropdown() {
 userDropdown.addEventListener("change", () => {
   const selectedUserId = userDropdown.value;
   if (selectedUserId === "") {
-    displayPage(1);
+    filteredUsers = allUsers;
   } else {
-    const selectedUser = userData.user.find(
+    const selectedUser = allUsers.find(
       (user) => user.id === parseInt(selectedUserId, 10)
     );
     if (selectedUser) {
-      profileContainer.innerHTML = "";
-      const filteredUsers = userData.user.filter(
-        (user) =>
-          user.first_name === selectedUser.first_name &&
-          user.last_name === selectedUser.last_name
-      );
-      filteredUsers.forEach((user) => {
-        const profileCard = createProfileCard(user);
-        profileContainer.appendChild(profileCard);
-      });
-      // console.log(filteredUsers.length);
-      console.log(filteredUsers);
-      if (filteredUsers.length < usersPerPage) {
-        pagination.style.display = "none";
-      } else {
-        pagination.style.display = "block";
-        for (let i = 1; i <= usersPerPage; i++) {
-          const button = document.createElement("button");
-          button.textContent = i;
-          button.id = `page-${i}`;
-          button.addEventListener("click", () => {
-            currentPage = i;
-            displayPage(filteredUsers);
-          });
-          pagination.appendChild(button);
-        }
-      }
+      const firstName = selectedUser.first_name;
+      const lastName = selectedUser.last_name;
+      filterUsersByFullName(firstName, lastName);
     }
   }
+  const filteredPages = Math.ceil(filteredUsers.length / usersPerPage);
+  createPaginationButtons(filteredPages);
+
+  console.log("filtr", filteredPages);
+
+  displayPage(currentPage);
 });
 
+function displayPage(page) {
+  profileContainer.innerHTML = "";
+  const startIndex = (page - 1) * usersPerPage;
+  const endIndex = startIndex + usersPerPage;
+
+  const usersToDisplay = filteredUsers.slice(startIndex, endIndex);
+
+  usersToDisplay.forEach((user) => {
+    const profileCard = createProfileCard(user);
+    profileContainer.appendChild(profileCard);
+  });
+
+  if (filteredUsers.length <= usersPerPage) {
+    pagination.style.display = "none";
+  } else {
+    pagination.style.display = "block";
+  }
+}
+
+filteredUsers = allUsers;
+createPaginationButtons(Math.ceil(allUsers.length / usersPerPage));
 displayPage(currentPage);
 updateDropdown();
